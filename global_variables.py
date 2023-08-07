@@ -1,0 +1,8 @@
+casos_ruta="../datasets/consolidado_casos_criminalidad.csv"
+edu_vial2018_ruta="../datasets/educacionvial_2018.csv"
+encuesta_calidad_ruta="../datasets/encuesta_calidad_de_vida.csv"
+encuesta_cultura_ruta="../datasets/encuesta_cultura_2019.csv"
+hurto_tp_ruta="../datasets/hurto_transporte_publico.csv"
+lesion_nf_ruta="../datasets/lesion_no_fatal_transito.csv"
+mede_victimas_ruta="../datasets/mede_victimas_inci.csv"
+traffic_ruta="../datasets/simmtrafficdata.csv"
