@@ -11,7 +11,7 @@ from global_variables import traffic_ruta
 from global_variables import compar_ruta
 
 
-def cargue():
+def cargue_datasets():
     casos=pd.read_csv(casos_ruta, delimiter=";", encoding="utf-8")
     edu_vial2018=pd.read_csv(edu_vial2018_ruta, delimiter=";", encoding="utf-8")
     encuesta_calidad=pd.read_csv(encuesta_calidad_ruta, delimiter=";", encoding="utf-8")
@@ -28,6 +28,9 @@ def casos_treatment(df):
     df["Codigo_comuna"]=df["Codigo_comuna"].astype(float)
     df["Codigo_comuna"]=df["Codigo_comuna"].astype(int)
     return df
-    
+
+def edu_vial2018(df):
+    df = df.drop(df.columns[[0,2,3,5,7,8,10,11,31,32,33,34,35]], axis=1)
+
 def medevic_treatment():
     return 2
