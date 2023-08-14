@@ -24,9 +24,11 @@ def cargue_datasets():
     return casos, edu_vial2018, encuesta_calidad, encuesta_cultura, hurto_tp, lesion_nf, mede_victimas, traffic, compar
 
 def casos_treatment(df):
-    df=df.drop(df[df["Codigo_comuna"]=="SIN DATO"].index)
-    df["Codigo_comuna"]=df["Codigo_comuna"].astype(float)
-    df["Codigo_comuna"]=df["Codigo_comuna"].astype(int)
+    df.rename(columns={'Codigo_comuna': 'Comuna'}, inplace=True)
+    df=df.drop(df[df["Comuna"]=="SIN DATO"].index)
+    df["Comuna"]=df["Comuna"].astype(float)
+    df["Comuna"]=df["Comuna"].astype(int)
+    
     return df
 
 def edu_vial2018(df):
