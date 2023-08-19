@@ -41,7 +41,8 @@ def edu_vial2018_treatment(df):
     df.rename(columns={'HOMBRE ADULTO (29 A 59 ANOS)': 'N_hombres (29-59)', 'HOMBRE_PERSONA_MAYOR_(60_ANOS_Y_MÁS)': 'N_hombres (>60)', 'HOMBRE_PEATON': 'N_hombres_peaton'}, inplace=True)
     df.rename(columns={'HOMBRE_CICLISTA': 'N_hombres_cicl', 'HOMBRE_MOTOCICLISTA':'N_hombres_motoc','HOMBRE_CONDUCTOR':'N_hombres_cond','HOMBRE_ACOMPANANTE_ Y/O_ PASAJERO':'N_hombres_ac/pas'}, inplace=True)
     df['Fecha'] = pd.to_datetime(df['Fecha'])
-    df['Fecha'] = df['Fecha'].dt.strftime('%d/%m/%Y')   
+    df['Fecha'] = df['Fecha'].dt.strftime('%d/%m/%Y')
+    df['Fecha'] = pd.to_datetime(df['Fecha'],format='%d/%m/%Y')
     
     return df
 
