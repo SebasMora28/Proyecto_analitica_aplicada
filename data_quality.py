@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+import re
 from global_variables import casos_ruta
 from global_variables import edu_vial2018_ruta
 from global_variables import encuesta_calidad_ruta
@@ -27,7 +28,6 @@ def casos_treatment(df):
     df.rename(columns={'Codigo_comuna': 'Comuna'}, inplace=True)
     df=df.drop(df[df["Comuna"]=="SIN DATO"].index)
     df["Comuna"]=df["Comuna"].astype(float)
-    df["Comuna"]=df["Comuna"].astype(int)
     
     return df
 
@@ -45,7 +45,23 @@ def edu_vial2018_treatment(df):
     df['Fecha'] = pd.to_datetime(df['Fecha'],format='%d/%m/%Y')
     
     return df
-
+    
+def compar_treatment(df):
+    df = df.drop(df.columns[[0,1,3,5,7,8,9,10,11,12,13,15,16,17,21]], axis=1)
+    df.rename(columns={'fecha_comparendo': 'Fecha', 'tipo_comparendo': 'Tipo', 'descripcion_servicio': 'Servicio'}, inplace=True)
+    df.rename(columns={'modelo': 'Modelo', 'descripcion_clase': 'Clase', 'codigo_infraccion': 'Infracción'}, inplace=True)
+    def extract_comuna(text):
+        match = re.search(r'Comuna (\d+)', text, re.IGNORECASE)
+        if match:
+            return f'{match.group(1)}'
+        return ''
+    df['Comuna'] = df['descripcion_tipo_via'].astype(str).apply(extract_comuna) + df['descripcion_zona'].astype(str).apply(extract_comuna)
+    df['Comuna'] = df['Comuna'].replace('', np.nan)
+    df["Comuna"]=df["Comuna"].astype(float)
+    df = df.drop(df.columns[[2,3]], axis=1)
+    
+    return df
+    
 def medevic_treatment():
     print(mede_victimas['Gravedad_victima'].value_counts())
     mede_victimas = mede_victimas.dropna()
