@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+import re
 from global_variables import casos_ruta
 from global_variables import edu_vial2018_ruta
 from global_variables import encuesta_calidad_ruta
@@ -34,22 +35,31 @@ def casos_treatment(df):
 def edu_vial2018(df):
     df = df.drop(df.columns[[0,2,3,5,7,8,10,11,31,32,33,34,35]], axis=1)
 
-def medevic_treatment():
-    print(mede_victimas['Gravedad_victima'].value_counts())
-    mede_victimas = mede_victimas.dropna()
+def medevic_treatment(df):
+    df = df.drop(df.columns[[2,4,8,9,10,11,13,14,15,16,18]], axis=1)
+    df.dropna(inplace=True)
     columns_to_check = ['Sexo', 'Edad']
     for column in columns_to_check:
-        mede_victimas = mede_victimas[(mede_victimas[column] != 'Sin Inf') & (mede_victimas[column] != 'Sin inf')]
-    import re
+        df = df[(df[column] != 'Sin Inf') & (df[column] != 'Sin inf')]
+
     def convert_age_to_int(age_str):
-        
         if isinstance(age_str, str) and '-' in age_str:
             ages = re.findall(r'\d+', age_str)  # Extraer los números del rango
             return (int(ages[0]) + int(ages[1])) // 2  # Promedio de los valores del rango
         else:
-            return int(age_str)  # Si es un valor único, simplemente conviértelo a entero
+            return int(age_str)  # Si es un valor único, simplemente se convierte a entero
     # Eliminar filas con valores NaN en la columna 'Edad'
-    mede_victimas['Edad'] = mede_victimas['Edad'].apply(convert_age_to_int)
-    mede_victimas = mede_victimas.drop(mede_victimas[mede_victimas['Edad'] > 100].index)
-    mede_victimas['Condicion'] = mede_victimas['Condicion'].replace({'Acompañante de Motocicleta': 'Acompañante de motocicleta'})
+    df['Edad'] = df['Edad'].apply(convert_age_to_int)
+    df = df.drop(df[df['Edad'] > 100].index)
+    df['Condicion'] = df['Condicion'].replace({'Acompañante de Motocicleta': 'Acompañante de motocicleta'})
+    df = df.drop(df.columns[[6]], axis=1)
+    df.rename(columns={'Fecha_incidente': 'Fecha'}, inplace=True)
+
+    df = df[(df['Fecha'] != 'Sin Inf')]
+    df['Fecha'] = pd.to_datetime(df['Fecha']) 
+    df['Fecha'] = df['Fecha'].dt.strftime('%d/%m/%Y')
+    #df['Comuna'] = df['Comuna'].str.split(' - ').str[0]
+    #df['Comuna'] = df['Comuna'].astype(float)
+
+    return df
     
