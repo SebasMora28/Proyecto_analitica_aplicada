@@ -62,9 +62,9 @@ def compar_treatment(df):
     
     return df
     
-def medevic_treatment():
-    print(mede_victimas['Gravedad_victima'].value_counts())
-    mede_victimas = mede_victimas.dropna()
+def medevic_treatment(df):
+    df = df.drop(df.columns[[2,4,9,10,11,12,14,15,16,18]], axis=1)
+    df=df.dropna()
     columns_to_check = ['Sexo', 'Edad']
     for column in columns_to_check:
         df = df[(df[column] != 'Sin Inf') & (df[column] != 'Sin inf')]
@@ -79,14 +79,19 @@ def medevic_treatment():
     df['Edad'] = df['Edad'].apply(convert_age_to_int)
     df = df.drop(df[df['Edad'] > 100].index)
     df['Condicion'] = df['Condicion'].replace({'Acompañante de Motocicleta': 'Acompañante de motocicleta'})
-    df = df.drop(df.columns[[6]], axis=1)
     df.rename(columns={'Fecha_incidente': 'Fecha'}, inplace=True)
 
     df = df[(df['Fecha'] != 'Sin Inf')]
     df['Fecha'] = pd.to_datetime(df['Fecha']) 
     df['Fecha'] = df['Fecha'].dt.strftime('%d/%m/%Y')
-    #df['Comuna'] = df['Comuna'].str.split(' - ').str[0]
-    #df['Comuna'] = df['Comuna'].astype(float)
+
+    df = df[(df['Comuna'] != 'Sin Inf')]
+    df = df[(df['Comuna'] != 'nan')]
+    df['Comuna'] = df['Comuna'].str.split(' - ').str[0]
+    df['Comuna'] = df['Comuna'].astype(float)
+
 
     return df
+    
+
     
