@@ -28,16 +28,43 @@ def casos_treatment(df):
     df.rename(columns={'Codigo_comuna': 'Comuna'}, inplace=True)
     df=df.drop(df[df["Comuna"]=="SIN DATO"].index)
     df["Comuna"]=df["Comuna"].astype(float)
-    df["Comuna"]=df["Comuna"].astype(int)
     
     return df
 
-def edu_vial2018(df):
+def edu_vial2018_treatment(df):
     df = df.drop(df.columns[[0,2,3,5,7,8,10,11,31,32,33,34,35]], axis=1)
-
-def medevic_treatment(df):
-    df = df.drop(df.columns[[2,4,8,9,10,11,13,14,15,16,18]], axis=1)
-    df.dropna(inplace=True)
+    df.rename(columns={'FECHA': 'Fecha', 'ACCIONES': 'Acciones', 'PUBLICO OBJETIVO': 'Publico', 'COD_COMUNA': 'Comuna'}, inplace=True)
+    df.rename(columns={'TOTAL PERSONAS SENSIBILIZADAS': 'N_personas', 'TOTAL MUJER': 'N_mujeres', 'TOTAL HOMBRE': 'N_hombres'}, inplace=True)
+    df.rename(columns={'MUJER NIÑO (6 a 13 años)': 'N_mujeres (6-13)', 'MUJER JOVEN (14 a 28 años)': 'N_mujeres (14-28)', 'MUJER ADULTO (29 a 59 años)': 'N_mujeres (29-59)'}, inplace=True)
+    df.rename(columns={'MUJER PERSONA MAYOR (60  años y más)': 'N_mujeres (>60)', 'MUJER PEATÓN': 'N_mujeres_peaton', 'MUJER MOTOCICLISTA': 'N_mujeres_motoc'}, inplace=True)
+    df.rename(columns={'MUJER CONDUCTOR': 'N_mujeres_cond', 'MUJER ACOMPAÑANTE Y/O PASAJERO': 'N_mujeres_ac/pas', 'HOMBRE_JOVEN_(14_A_28_ANOS)': 'N_hombres (14-28)'}, inplace=True)
+    df.rename(columns={'HOMBRE ADULTO (29 A 59 ANOS)': 'N_hombres (29-59)', 'HOMBRE_PERSONA_MAYOR_(60_ANOS_Y_MÁS)': 'N_hombres (>60)', 'HOMBRE_PEATON': 'N_hombres_peaton'}, inplace=True)
+    df.rename(columns={'HOMBRE_CICLISTA': 'N_hombres_cicl', 'HOMBRE_MOTOCICLISTA':'N_hombres_motoc','HOMBRE_CONDUCTOR':'N_hombres_cond','HOMBRE_ACOMPANANTE_ Y/O_ PASAJERO':'N_hombres_ac/pas'}, inplace=True)
+    df['Fecha'] = pd.to_datetime(df['Fecha'])
+    df['Fecha'] = df['Fecha'].dt.strftime('%d/%m/%Y')
+    df['Fecha'] = pd.to_datetime(df['Fecha'],format='%d/%m/%Y')
+    
+    return df
+    
+def compar_treatment(df):
+    df = df.drop(df.columns[[0,1,3,5,7,8,9,10,11,12,13,15,16,17,21]], axis=1)
+    df.rename(columns={'fecha_comparendo': 'Fecha', 'tipo_comparendo': 'Tipo', 'descripcion_servicio': 'Servicio'}, inplace=True)
+    df.rename(columns={'modelo': 'Modelo', 'descripcion_clase': 'Clase', 'codigo_infraccion': 'Infracción'}, inplace=True)
+    def extract_comuna(text):
+        match = re.search(r'Comuna (\d+)', text, re.IGNORECASE)
+        if match:
+            return f'{match.group(1)}'
+        return ''
+    df['Comuna'] = df['descripcion_tipo_via'].astype(str).apply(extract_comuna) + df['descripcion_zona'].astype(str).apply(extract_comuna)
+    df['Comuna'] = df['Comuna'].replace('', np.nan)
+    df["Comuna"]=df["Comuna"].astype(float)
+    df = df.drop(df.columns[[2,3]], axis=1)
+    
+    return df
+    
+def medevic_treatment():
+    print(mede_victimas['Gravedad_victima'].value_counts())
+    mede_victimas = mede_victimas.dropna()
     columns_to_check = ['Sexo', 'Edad']
     for column in columns_to_check:
         df = df[(df[column] != 'Sin Inf') & (df[column] != 'Sin inf')]
