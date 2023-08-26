@@ -60,6 +60,10 @@ def compar_treatment(df):
     df["Comuna"]=df["Comuna"].astype(float)
     df = df.drop(df.columns[[2,3]], axis=1)
     
+    df = df[df['Fecha'] != 'FECHA_COMPARENDO']
+    df['Fecha'] = pd.to_datetime(df['Fecha'], format='%d/%m/%Y')
+    df['Fecha_Formateada'] = df['Fecha'].dt.strftime('%d/%m/%Y')
+    
     return df
     
 def medevic_treatment(df):
