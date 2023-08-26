@@ -43,6 +43,7 @@ def edu_vial2018_treatment(df):
     df['Fecha'] = pd.to_datetime(df['Fecha'])
     df['Fecha'] = df['Fecha'].dt.strftime('%d/%m/%Y')
     df['Fecha'] = pd.to_datetime(df['Fecha'],format='%d/%m/%Y')
+    df["Comuna"]=df["Comuna"].astype(float)
     
     return df
     
@@ -65,6 +66,19 @@ def compar_treatment(df):
     df.reset_index(drop=True, inplace=True)
     df['Fecha'] = pd.to_datetime(df['Fecha'], format='%d/%m/%Y')
     
+    return df
+
+def hurto_tp_treatment(df):
+    df = df.drop(df.columns[[1,2,3,7,8,9,10,11,12,14,15,16,18,20,21,22,23,24,27,29,30,31,32,33,34]], axis=1)
+    df.rename(columns={'fecha_hecho': 'Fecha', 'sexo': 'Sexo', 'edad': 'Edad','estado_civil': 'Estado_civil', 'medio_transporte': 'Transporte' }, inplace=True)
+    df.rename(columns={'modalidad': 'Modalidad','conducta_especial': 'Conducta','codigo_comuna': 'Comuna','bien': 'Bien', 'lugar': 'Lugar' }, inplace=True)
+    
+    df = df[df['Comuna'] != 'SIN DATO']
+    df['Comuna'] = df['Comuna'].astype(float)
+
+    df['Fecha'] = pd.to_datetime(df['Fecha'])
+    df['Fecha'] = df['Fecha'].dt.strftime('%d/%m/%Y')
+    df['Fecha'] = pd.to_datetime(df['Fecha'],format='%d/%m/%Y')
     return df
     
 def medevic_treatment(df):
@@ -95,7 +109,6 @@ def medevic_treatment(df):
     df = df[(df['Comuna'] != 'nan')]
     df['Comuna'] = df['Comuna'].str.split(' - ').str[0]
     df['Comuna'] = df['Comuna'].astype(float)
-
 
     return df
     
