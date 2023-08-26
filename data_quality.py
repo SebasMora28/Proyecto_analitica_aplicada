@@ -61,8 +61,9 @@ def compar_treatment(df):
     df = df.drop(df.columns[[2,3]], axis=1)
     
     df = df[df['Fecha'] != 'FECHA_COMPARENDO']
+    
+    df.reset_index(drop=True, inplace=True)
     df['Fecha'] = pd.to_datetime(df['Fecha'], format='%d/%m/%Y')
-    df['Fecha_Formateada'] = df['Fecha'].dt.strftime('%d/%m/%Y')
     
     return df
     
@@ -86,8 +87,9 @@ def medevic_treatment(df):
     df.rename(columns={'Fecha_incidente': 'Fecha'}, inplace=True)
 
     df = df[(df['Fecha'] != 'Sin Inf')]
-    df['Fecha'] = pd.to_datetime(df['Fecha']) 
-    df['Fecha'] = df['Fecha'].dt.strftime('%d/%m/%Y')
+    
+    df.reset_index(drop=True, inplace=True)
+    df['Fecha'] = pd.to_datetime(df['Fecha'], format='%d/%m/%Y') 
 
     df = df[(df['Comuna'] != 'Sin Inf')]
     df = df[(df['Comuna'] != 'nan')]
