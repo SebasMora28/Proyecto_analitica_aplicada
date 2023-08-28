@@ -62,6 +62,8 @@ def compar_treatment(df):
     df = df.drop(df.columns[[2,3]], axis=1)
     
     df = df[df['Fecha'] != 'FECHA_COMPARENDO']
+    df['Infracción'] = df['Infracción'].str.replace(r'\\.*$', '', regex=True)
+    df['Tipo'] = df['Tipo'].str.replace(r'\\xF3', 'ó', regex=True)
     
     df.reset_index(drop=True, inplace=True)
     df['Fecha'] = pd.to_datetime(df['Fecha'], format='%d/%m/%Y')
