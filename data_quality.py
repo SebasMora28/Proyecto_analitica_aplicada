@@ -109,6 +109,7 @@ def medevic_treatment(df):
     df = df[(df['Comuna'] != 'nan')]
     df['Comuna'] = df['Comuna'].str.split(' - ').str[0]
     df['Comuna'] = df['Comuna'].astype(float)
+    df['Año'] =df ['Año'].astype(int)
 
     return df
     
