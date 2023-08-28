@@ -113,5 +113,17 @@ def medevic_treatment(df):
 
     return df
     
+def traffic_treatment(df):
+    df = df[['ANO','VELOCIDAD','MES','CORREDOR','SENTIDO']]
+    df = df[df['CORREDOR'] != 'Colombia']
+    aux_comunas = pd.DataFrame({
+        'CORREDOR': ['Carrera 70','Avenida Regional','Avenida 33','Avenida Las Palmas','San Juan','Calle 80','Calle 30','Autopista Sur','Carrera 43C','Transversal 78','Avenida El Poblado','Calle 9 Sur - Los Balsos','Avenida Guayabal','Avenida Ferrocarril','Avenida Las Vegas','Autopista Norte','Avenida Bolivariana','Calle 12 Sur','Calle 10','Loma El Tesoro','Regional Paralela','Avenida Oriental','Carrera 43A','Carrera 47','Carrera 78','Carrera 48','Transversal 32','Avenida 80','Calle 48','Calle 5','Carrera 65','Calle 52 - La Playa','Calle 57 - Argentina','Calle 31','Calle 30A','Carrera 37','Calle 34','Carrera 57 - Avenida Ferrocarril','Calle 55 - La Iguana','V\\xEDa al Mar','V\\xEDa al T\\xFAnel de Occidente','Calle 35','Calle 65','Calle 3 Sur','Calle 71','Calle 73','Calle 4 Sur','Carrera 34'],
+        'Comuna': [11,10,7,2,3,6,13,16,14,11,14,14,15,10,6,4,6,14,10,14,7,8,14,15,12,6,12,6,6,10,8,10,10,13,13,13,11,10,8,16,16,9,11,14,11,11,14,11]
+    })
+    df = pd.merge(df, aux_comunas, on='CORREDOR', how='left')
+
+    return df
+
+
 
     
