@@ -11,6 +11,16 @@ from global_variables import mede_victimas_ruta
 from global_variables import traffic_ruta
 from global_variables import compar_ruta
 
+from global_variables import casos_rutac
+from global_variables import edu_vial2018_rutac
+from global_variables import encuesta_calidad_rutac
+from global_variables import encuesta_cultura_rutac
+from global_variables import hurto_tp_rutac
+from global_variables import lesion_nf_rutac
+from global_variables import mede_victimas_rutac
+from global_variables import traffic_rutac
+from global_variables import compar_rutac
+
 
 def cargue_datasets():
     casos=pd.read_csv(casos_ruta, delimiter=";", encoding="utf-8")
@@ -29,6 +39,8 @@ def casos_treatment(df):
     df=df.drop(df[df["Comuna"]=="SIN DATO"].index)
     df["Comuna"]=df["Comuna"].astype(float)
     
+    df.to_csv(casos_rutac, index=False, encoding = "utf-8", sep=";")
+    
     return df
 
 def edu_vial2018_treatment(df):
@@ -44,6 +56,8 @@ def edu_vial2018_treatment(df):
     df['Fecha'] = df['Fecha'].dt.strftime('%d/%m/%Y')
     df['Fecha'] = pd.to_datetime(df['Fecha'],format='%d/%m/%Y')
     df["Comuna"]=df["Comuna"].astype(float)
+    
+    df.to_csv(edu_vial2018_rutac, encoding = "utf-8", sep=";")
     
     return df
     
@@ -66,6 +80,8 @@ def compar_treatment(df):
     df.reset_index(drop=True, inplace=True)
     df['Fecha'] = pd.to_datetime(df['Fecha'], format='%d/%m/%Y')
     
+    df.to_csv(compar_rutac, encoding = "utf-8", sep=";")
+    
     return df
 
 def hurto_tp_treatment(df):
@@ -79,6 +95,9 @@ def hurto_tp_treatment(df):
     df['Fecha'] = pd.to_datetime(df['Fecha'])
     df['Fecha'] = df['Fecha'].dt.strftime('%d/%m/%Y')
     df['Fecha'] = pd.to_datetime(df['Fecha'],format='%d/%m/%Y')
+    
+    df.to_csv(hurto_tp_rutac, encoding = "utf-8", sep=";")
+    
     return df
     
 def medevic_treatment(df):
@@ -110,6 +129,8 @@ def medevic_treatment(df):
     df['Comuna'] = df['Comuna'].str.split(' - ').str[0]
     df['Comuna'] = df['Comuna'].astype(float)
     df['Año'] =df ['Año'].astype(int)
+    
+    df.to_csv(mede_victimas_rutac, encoding = "utf-8", sep=";")
 
     return df
     
@@ -125,5 +146,15 @@ def traffic_treatment(df):
     return df
 
 
-
+def cargue_datasets_c():
+    casos=pd.read_csv(casos_rutac, delimiter=";", encoding="utf-8")
+    edu_vial2018=pd.read_csv(edu_vial2018_rutac, delimiter=";", encoding="utf-8")
+    #encuesta_calidad=pd.read_csv(encuesta_calidad_rutac, delimiter=";", encoding="utf-8")
+    #encuesta_cultura=pd.read_csv(encuesta_cultura_rutac, delimiter=";", encoding="utf-8")
+    hurto_tp=pd.read_csv(hurto_tp_rutac, delimiter=";", encoding="utf-8")
+    #lesion_nf=pd.read_csv(lesion_nf_rutac, delimiter=";", encoding="utf-8")
+    mede_victimas=pd.read_csv(mede_victimas_rutac, delimiter=";", encoding="utf-8")
+    #traffic=pd.read_csv(traffic_rutac, delimiter=";", encoding="utf-8")
+    compar=pd.read_csv(compar_rutac, delimiter=";", encoding="utf-8")
+    return casos, edu_vial2018, hurto_tp, mede_victimas, compar
     
