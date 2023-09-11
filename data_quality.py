@@ -35,9 +35,11 @@ def cargue_datasets():
     return casos, edu_vial2018, encuesta_calidad, encuesta_cultura, hurto_tp, lesion_nf, mede_victimas, traffic, compar
 
 def casos_treatment(df):
-    df.rename(columns={'Codigo_comuna': 'Comuna'}, inplace=True)
+    df.rename(columns={'Codigo_comuna': 'Comuna', 'Fecha_hecho': 'Año' }, inplace=True)
     df=df.drop(df[df["Comuna"]=="SIN DATO"].index)
     df["Comuna"]=df["Comuna"].astype(float)
+    
+    df["Año"]=df["Año"].astype(int)
     
     df.to_csv(casos_rutac, index=False, encoding = "utf-8", sep=";")
     
@@ -56,6 +58,8 @@ def edu_vial2018_treatment(df):
     df['Fecha'] = df['Fecha'].dt.strftime('%d/%m/%Y')
     df['Fecha'] = pd.to_datetime(df['Fecha'],format='%d/%m/%Y')
     df["Comuna"]=df["Comuna"].astype(float)
+    
+    df['Año'] = df['Fecha'].dt.year.astype(int)
     
     df.to_csv(edu_vial2018_rutac, index=False, encoding = "utf-8", sep=";")
     
@@ -80,6 +84,8 @@ def compar_treatment(df):
     df.reset_index(drop=True, inplace=True)
     df['Fecha'] = pd.to_datetime(df['Fecha'], format='%d/%m/%Y')
     
+    df['Año'] = df['Fecha'].dt.year.astype(int)
+    
     df.to_csv(compar_rutac, index=False, encoding = "utf-8", sep=";")
     
     return df
@@ -95,6 +101,8 @@ def hurto_tp_treatment(df):
     df['Fecha'] = pd.to_datetime(df['Fecha'])
     df['Fecha'] = df['Fecha'].dt.strftime('%d/%m/%Y')
     df['Fecha'] = pd.to_datetime(df['Fecha'],format='%d/%m/%Y')
+    
+    df['Año'] = df['Fecha'].dt.year.astype(int)
     
     df.to_csv(hurto_tp_rutac, index=False, encoding = "utf-8", sep=";")
     
@@ -128,6 +136,7 @@ def medevic_treatment(df):
     df = df[(df['Comuna'] != 'nan')]
     df['Comuna'] = df['Comuna'].str.split(' - ').str[0]
     df['Comuna'] = df['Comuna'].astype(float)
+    
     df['Año'] =df ['Año'].astype(int)
     
     df.to_csv(mede_victimas_rutac, index=False, encoding = "utf-8", sep=";")
