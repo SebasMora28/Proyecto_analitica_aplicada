@@ -57,7 +57,7 @@ def edu_vial2018_treatment(df):
     df['Fecha'] = pd.to_datetime(df['Fecha'],format='%d/%m/%Y')
     df["Comuna"]=df["Comuna"].astype(float)
     
-    df.to_csv(edu_vial2018_rutac, encoding = "utf-8", sep=";")
+    df.to_csv(edu_vial2018_rutac, index=False, encoding = "utf-8", sep=";")
     
     return df
     
@@ -80,7 +80,7 @@ def compar_treatment(df):
     df.reset_index(drop=True, inplace=True)
     df['Fecha'] = pd.to_datetime(df['Fecha'], format='%d/%m/%Y')
     
-    df.to_csv(compar_rutac, encoding = "utf-8", sep=";")
+    df.to_csv(compar_rutac, index=False, encoding = "utf-8", sep=";")
     
     return df
 
@@ -96,7 +96,7 @@ def hurto_tp_treatment(df):
     df['Fecha'] = df['Fecha'].dt.strftime('%d/%m/%Y')
     df['Fecha'] = pd.to_datetime(df['Fecha'],format='%d/%m/%Y')
     
-    df.to_csv(hurto_tp_rutac, encoding = "utf-8", sep=";")
+    df.to_csv(hurto_tp_rutac, index=False, encoding = "utf-8", sep=";")
     
     return df
     
@@ -130,7 +130,7 @@ def medevic_treatment(df):
     df['Comuna'] = df['Comuna'].astype(float)
     df['Año'] =df ['Año'].astype(int)
     
-    df.to_csv(mede_victimas_rutac, encoding = "utf-8", sep=";")
+    df.to_csv(mede_victimas_rutac, index=False, encoding = "utf-8", sep=";")
 
     return df
     
