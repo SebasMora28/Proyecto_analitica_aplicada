@@ -13,12 +13,8 @@ from global_variables import compar_ruta
 
 from global_variables import casos_rutac
 from global_variables import edu_vial2018_rutac
-from global_variables import encuesta_calidad_rutac
-from global_variables import encuesta_cultura_rutac
 from global_variables import hurto_tp_rutac
-from global_variables import lesion_nf_rutac
 from global_variables import mede_victimas_rutac
-from global_variables import traffic_rutac
 from global_variables import compar_rutac
 
 
@@ -154,16 +150,27 @@ def traffic_treatment(df):
 
     return df
 
-
 def cargue_datasets_c():
     casos=pd.read_csv(casos_rutac, delimiter=";", encoding="utf-8")
     edu_vial2018=pd.read_csv(edu_vial2018_rutac, delimiter=";", encoding="utf-8")
-    #encuesta_calidad=pd.read_csv(encuesta_calidad_rutac, delimiter=";", encoding="utf-8")
-    #encuesta_cultura=pd.read_csv(encuesta_cultura_rutac, delimiter=";", encoding="utf-8")
     hurto_tp=pd.read_csv(hurto_tp_rutac, delimiter=";", encoding="utf-8")
-    #lesion_nf=pd.read_csv(lesion_nf_rutac, delimiter=";", encoding="utf-8")
     mede_victimas=pd.read_csv(mede_victimas_rutac, delimiter=";", encoding="utf-8")
-    #traffic=pd.read_csv(traffic_rutac, delimiter=";", encoding="utf-8")
     compar=pd.read_csv(compar_rutac, delimiter=";", encoding="utf-8")
     return casos, edu_vial2018, hurto_tp, mede_victimas, compar
+    
+def casos_c(df):
+    df=df.pivot_table(index=["Año", "Comuna"], columns="Conducta", values="Cantidad_casos")
+    return df
+    
+def hurto_tp_c(df):
+    df1 = df.pivot_table(index=["Año", "Comuna"], columns="Transporte", values= "Sexo", aggfunc="count", fill_value=0)
+    df2 = df.pivot_table(index=["Año", "Comuna"], columns="Estado_civil", values= "Sexo", aggfunc="count", fill_value=0)
+    df3 = pd.merge(df1, df2, on=["Comuna","Año"], how="inner")
+    
+    df4 = df.groupby(['Año', 'Comuna', 'Sexo'])['Edad'].mean().reset_index()
+    df4['edad_promedio'] = df4['Edad'].round()
+    df4= df.groupby(['Año', 'Comuna', 'Sexo'])['Lugar'].agg(pd.Series.mode).reset_index()
+    df4= df.groupby(['Año', 'Comuna', 'Sexo'])['Bien'].agg(pd.Series.mode).reset_index()
+    df = pd.merge(df3, df4, on=["Comuna","Año"], how="inner")
+    return df
     
