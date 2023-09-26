@@ -99,7 +99,7 @@ def hurto_tp_treatment(df):
     df['Fecha'] = pd.to_datetime(df['Fecha'],format='%d/%m/%Y')
     
     df['Año'] = df['Fecha'].dt.year.astype(int)
-    
+    df = df[df['Sexo'] != 'Sin dato']
     df.to_csv(hurto_tp_rutac, index=False, encoding = "utf-8", sep=";")
     
     return df
@@ -177,8 +177,7 @@ def hurto_tp_c(df):
     df = pd.merge(df, df5, on=["Comuna", "Año"], how="inner")
     df = pd.merge(df, df0, on=["Comuna", "Año"], how="inner")
     
-    df = df.drop('Sin dato_x', axis=1)
-    df = df.drop('Sin dato_y', axis=1)
+    df = df.drop('Sin dato', axis=1)
 
     return df
     
