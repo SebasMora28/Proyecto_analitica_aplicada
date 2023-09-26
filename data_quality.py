@@ -182,3 +182,13 @@ def hurto_tp_c(df):
 
     return df
     
+def medevic_c(df):
+    df0 = df.pivot_table(index=["Año", "Comuna"], columns="Clase_incidente", values= "Sexo", aggfunc="count", fill_value=0)
+    df1 = df.groupby(['Año','Comuna'])['Edad'].mean().reset_index().round()
+    df2 = df.pivot_table(index=["Año", "Comuna"], columns="Sexo", values= "Mes", aggfunc="count", fill_value=0)
+    df3 = df.pivot_table(index=["Año", "Comuna"], columns="Condicion", values= "Sexo", aggfunc="count", fill_value=0)
+    df4 = pd.merge(df0, df1,  on=["Comuna","Año"], how="inner")
+    df5 = pd.merge(df2, df3,  on=["Comuna","Año"], how="inner")
+    df = pd.merge(df5, df4,  on=["Comuna","Año"], how="inner")
+    df.rename(columns={'F': 'Mujeres accidentadas', 'M': 'Hombres accidentados', 'Edad': 'Edad accidente'}, inplace=True)
+    return df
