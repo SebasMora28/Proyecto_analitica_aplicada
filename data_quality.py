@@ -162,14 +162,23 @@ def casos_c(df):
     return df
     
 def hurto_tp_c(df):
-    df1 = df.pivot_table(index=["Año", "Comuna"], columns="Transporte", values= "Sexo", aggfunc="count", fill_value=0)
-    df2 = df.pivot_table(index=["Año", "Comuna"], columns="Estado_civil", values= "Sexo", aggfunc="count", fill_value=0)
-    df3 = pd.merge(df1, df2, on=["Comuna","Año"], how="inner")
+    df0 = df.groupby(['Año', 'Comuna', 'Sexo']).size().unstack(fill_value=0).reset_index()
     
-    df4 = df.groupby(['Año', 'Comuna', 'Sexo'])['Edad'].mean().reset_index()
-    df4['edad_promedio'] = df4['Edad'].round()
-    df4= df.groupby(['Año', 'Comuna', 'Sexo'])['Lugar'].agg(pd.Series.mode).reset_index()
-    df4= df.groupby(['Año', 'Comuna', 'Sexo'])['Bien'].agg(pd.Series.mode).reset_index()
-    df = pd.merge(df3, df4, on=["Comuna","Año"], how="inner")
+    df1 = df.pivot_table(index=["Año", "Comuna"], columns="Transporte", values="Sexo", aggfunc="count", fill_value=0)
+    df2 = df.pivot_table(index=["Año", "Comuna"], columns="Estado_civil", values="Sexo", aggfunc="count", fill_value=0)
+    df3 = pd.merge(df1, df2, on=["Comuna", "Año"], how="inner")
+    
+    df4 = df.groupby(['Año', 'Comuna'])['Edad'].mean().reset_index().round()
+    df4.rename(columns={'Edad': 'Edad_promedio', 'Hombre':'Hombres_robados', 'Mujer': 'Mujeres_robadas'}, inplace=True)
+    df5 = df.groupby(['Año', 'Comuna'])['Lugar'].agg(pd.Series.mode).reset_index()
+    df5 = df5.merge(df.groupby(['Año', 'Comuna'])['Bien'].agg(pd.Series.mode).reset_index(), on=['Año', 'Comuna'])
+    
+    df = pd.merge(df3, df4, on=["Comuna", "Año"], how="inner")
+    df = pd.merge(df, df5, on=["Comuna", "Año"], how="inner")
+    df = pd.merge(df, df0, on=["Comuna", "Año"], how="inner")
+    
+    df = df.drop('Sin dato_x', axis=1)
+    df = df.drop('Sin dato_y', axis=1)
+
     return df
     
