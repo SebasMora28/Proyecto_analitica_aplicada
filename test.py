@@ -26,6 +26,8 @@ with tab1:
     st.caption(':red[**Creación e implementación del modelo**]\n\nSe utilizó el algoritmo de **KModes** para hacer **clusterización** e identificar a los **inputs** más representativos de la muestra, con esto se buscó **identificar** que categorías en cada **variable** eran aquellas que se **relacionaban** con la **incidencia** del **crimen**.')
     genero = None
     edad = None
+    st.caption(":white[Como se mencionaba anteriormente éste modelo permite definir el :red[Género:] Hombre o Mujer y :red[Edad:] Niño (0-12), Adolescente (13-18), Adulto joven (19-30), Adulto (31-60) o Adulto Mayor (60+).]")
+    st.caption('Puedes experimentar el modelo presionando "Cargar valores" en el cuadro inferior y asignando variabes según tu interés.')
 
     with st.form('myform', clear_on_submit=True):
 
@@ -105,14 +107,10 @@ with tab1:
     st.write('▸ :orange[Género de la víctima: ]', genero)
     st.write('▸ :orange[Edad de la víctima: ] ', edad)
 
-######################################################################################################
 with tab2:
 
     st.caption(':red[**Descripción de la base de datos**]\n\nEl modelo unificado de seguridad y convivencia permite acceder a información de hechos relacionados con la seguridad, la convivencia, derechos humanos y justificia que han ocurrido en la ciudad de Medellín y que han sido recopilados por el proyecto municipal Sistema de Información para la Seguridad y la Convivencia SISC. Éste DataSet busca presentar el consolidado de la cantidad de casos de hurto en transporte público en las diferentes comunas de la ciudad de Medellín.')
     st.divider()
-
-    ####################################################  
-
 
     col1,col2 = st.columns(2)
 
@@ -143,7 +141,6 @@ with tab2:
         st.write(pie_chart)
 
     with col2:
-
 
         # Contar las ocurrencias de modalidades y encontrar el top 3
         top_modalidades = hurto_tp['Modalidad'].value_counts().nlargest(4).reset_index()
@@ -238,7 +235,6 @@ with tab2:
     ).properties(width=700, height=400,title='Frecuencia de hurtos desde 2017')
 
     st.altair_chart(chart, use_container_width=True)
-
 
     ###################################################
 

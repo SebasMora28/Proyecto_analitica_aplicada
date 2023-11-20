@@ -106,4 +106,4 @@ bien_options = ['Celular', 'Elementos escolares', 'Computador', 'Peso',
        'Promesa de compraventa', 'Bebidas',
        'Medicamento antiinflamatorio', 'Joyero', 'Aceite', 'Adaptador',
        'Vodka']
-grupo_edad = ['Niño','Adolescente','Adulto joven','Adulto','Adulto mayor']
+grupo_edad = ['Niño (0-12 años)','Adolescente (13-18 años)','Adulto joven (19-30 años)','Adulto (31-60 años)','Adulto mayor (60+ años)']
